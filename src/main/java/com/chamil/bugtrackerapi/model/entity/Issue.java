@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,6 +18,8 @@ public abstract class Issue extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
+    @OneToMany(mappedBy = "issueId", fetch = FetchType.LAZY)
+    private List<Comment> comments;
     @Enumerated(EnumType.STRING)
     private Status status;
     private String reportedBy;

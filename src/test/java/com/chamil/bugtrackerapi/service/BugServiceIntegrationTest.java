@@ -66,7 +66,7 @@ class BugServiceIntegrationTest {
 
         List<Bug> actual = bugService.get(1L);
         String actualJson = objectMapper.writeValueAsString(actual);
-        System.out.println(actualJson);
+
         JSONAssert.assertEquals(expected, actualJson, JSONCompareMode.STRICT);
     }
 

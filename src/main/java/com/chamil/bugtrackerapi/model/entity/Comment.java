@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 @Setter
 @Entity
 public class Comment extends BaseEntity {
+    private Long issueId;
     private String author;
     private String content;
 }
