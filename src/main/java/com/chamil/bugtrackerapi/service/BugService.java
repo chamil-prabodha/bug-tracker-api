@@ -26,7 +26,7 @@ public class BugService implements IssueService<Bug> {
         try {
             return bugRepository.findBugByProjectIdAndId(projectId, bugId).orElseThrow();
         } catch (NoSuchElementException e) {
-            log.warn("Requested bug not found for project id [{}] bug id [{}]", projectId, bugId);
+            log.warn("Requested bug not found for project id [{}] bug id [{}]", projectId, bugId, e);
             throw new APIException(ErrorCode.NOT_FOUND, String.format("Requested bug not found for project id [%s] bug id [%s]", projectId, bugId));
         } catch (Exception e) {
             log.error("An unknown exception occurred while retrieving the bug for project [{}] bug id [{}]", projectId, bugId, e);
@@ -36,7 +36,12 @@ public class BugService implements IssueService<Bug> {
 
     @Override
     public List<Bug> get(Long projectId) {
-        return null;
+        try {
+            return bugRepository.findAllByProjectId(projectId);
+        } catch (Exception e) {
+            log.error("An unknown exception occurred while retrieving all the bugs for project [{}] ", projectId, e);
+            throw new APIException(ErrorCode.UNKNOWN_EXCEPTION, e.getMessage());
+        }
     }
 
     @Override

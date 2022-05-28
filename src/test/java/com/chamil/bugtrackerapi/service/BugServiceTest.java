@@ -9,8 +9,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,12 +25,19 @@ public class BugServiceTest {
         this.bugService = bugService;
     }
 
-    @Sql("sql/bug-service-test.sql")
-    @Transactional
     @Test
     void getBugErrorTest() throws APIException {
         Mockito.when(bugRepository.findBugByProjectIdAndId(Mockito.anyLong(), Mockito.anyLong())).thenThrow(new RuntimeException("Unknown Error"));
         APIException exception = assertThrows(APIException.class, () -> bugService.get(2L, 1L));
+        assertEquals("An unknown error occurred", exception.getMessage());
+        assertEquals(ErrorCode.UNKNOWN_EXCEPTION, exception.getErrorCode());
+        assertEquals("Unknown Error", exception.getAdditionalInfo());
+    }
+
+    @Test
+    void getAllBugsErrorTest() throws APIException {
+        Mockito.when(bugRepository.findAllByProjectId(Mockito.anyLong())).thenThrow(new RuntimeException("Unknown Error"));
+        APIException exception = assertThrows(APIException.class, () -> bugService.get(2L));
         assertEquals("An unknown error occurred", exception.getMessage());
         assertEquals(ErrorCode.UNKNOWN_EXCEPTION, exception.getErrorCode());
         assertEquals("Unknown Error", exception.getAdditionalInfo());

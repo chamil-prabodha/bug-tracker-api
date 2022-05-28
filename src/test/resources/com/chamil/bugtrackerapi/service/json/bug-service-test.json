@@ -1,0 +1,1 @@
+[{"id":1,"name":"Bug 1","project":{"id":1,"projectKey":"project-1","name":"Project 1"},"status":"OPEN","reportedBy":"USER 1","severity":"LOW"},{"id":2,"name":"Bug 2","project":{"id":1,"projectKey":"project-1","name":"Project 1"},"status":"CLOSED","reportedBy":"USER 2","severity":"MEDIUM"}]
