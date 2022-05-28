@@ -35,10 +35,10 @@ class BugServiceIntegrationTest {
     @Transactional
     @Test
     void getBugSuccessTest() throws APIException {
-        Bug actual = bugService.get(1L, 1L);
+        Bug actual = bugService.get(1L, 10L);
 
         assertNotNull(actual);
-        assertEquals(1, actual.getId());
+        assertEquals(10, actual.getId());
         assertEquals("Bug 1", actual.getName());
         assertEquals(Status.OPEN, actual.getStatus());
         assertEquals(Severity.LOW, actual.getSeverity());
@@ -76,5 +76,97 @@ class BugServiceIntegrationTest {
     void getAllBugsEmptyTest() throws APIException {
         List<Bug> actual = bugService.get(2L);
         assertTrue(actual.isEmpty());
+    }
+
+    @Sql("sql/bug-service-test.sql")
+    @Transactional
+    @Test
+    void createBugSuccessTest() throws APIException {
+        Bug bug = new Bug();
+        bug.setName("New Bug");
+        bug.setDescription("Creating New Bug");
+        bug.setSeverity(Severity.LOW);
+        bug.setReportedBy("USER 3");
+        bug.setStatus(Status.OPEN);
+
+        Bug actual = bugService.create(1L, bug);
+
+        assertNotNull(actual);
+        assertEquals(1, actual.getId());
+        assertEquals("Project 1", actual.getProject().getName());
+    }
+
+    @Sql("sql/bug-service-test.sql")
+    @Transactional
+    @Test
+    void createBugProjectNotFoundTest() {
+        APIException exception = assertThrows(APIException.class, () ->  bugService.create(2L, new Bug()));
+        assertEquals("Requested resource not found", exception.getMessage());
+        assertEquals(ErrorCode.NOT_FOUND, exception.getErrorCode());
+        assertEquals("Requested project was not found for project id [2]", exception.getAdditionalInfo());
+    }
+
+    @Sql("sql/bug-service-test.sql")
+    @Transactional
+    @Test
+    void updateBugSuccessTest() throws APIException {
+        Bug bug = new Bug();
+        bug.setName("Updated Bug");
+        bug.setDescription("Updating Bug");
+        bug.setStatus(Status.CLOSED);
+        bug.setReportedBy("USER 3");
+
+        Bug actual = bugService.update(1L, 10L, bug);
+
+        assertNotNull(actual);
+        assertEquals(10, actual.getId());
+        assertEquals("Updated Bug", actual.getName());
+        assertEquals("Updating Bug", actual.getDescription());
+        assertEquals(Status.CLOSED, actual.getStatus());
+        assertEquals("USER 3", actual.getReportedBy());
+        assertEquals(Severity.LOW, actual.getSeverity());
+    }
+
+    @Sql("sql/bug-service-test.sql")
+    @Transactional
+    @Test
+    void updateBugNotFoundTest() {
+        Bug bug = new Bug();
+        bug.setName("Updated Bug");
+        bug.setDescription("Updating Bug");
+        bug.setStatus(Status.CLOSED);
+        bug.setReportedBy("USER 3");
+
+        APIException exception = assertThrows(APIException.class, () ->  bugService.update(1L, 1L, bug));
+        assertEquals("Requested resource not found", exception.getMessage());
+        assertEquals(ErrorCode.NOT_FOUND, exception.getErrorCode());
+        assertEquals("Requested bug was not found for project id [1] bug id [1]", exception.getAdditionalInfo());
+    }
+
+    @Sql("sql/bug-service-test.sql")
+    @Transactional
+    @Test
+    void deleteBugSuccessTest() throws APIException {
+        Bug actual = bugService.delete(1L, 10L);
+
+        assertNotNull(actual);
+        assertEquals(10, actual.getId());
+        assertEquals("Bug 1", actual.getName());
+        assertEquals("Description 1", actual.getDescription());
+        assertEquals(Status.OPEN, actual.getStatus());
+        assertEquals("USER 1", actual.getReportedBy());
+        assertEquals(Severity.LOW, actual.getSeverity());
+
+        APIException exception = assertThrows(APIException.class, () -> bugService.get(1L, 10L));
+    }
+
+    @Sql("sql/bug-service-test.sql")
+    @Transactional
+    @Test
+    void deleteBugNotFoundTest() {
+        APIException exception = assertThrows(APIException.class, () ->  bugService.delete(1L, 1L));
+        assertEquals("Requested resource not found", exception.getMessage());
+        assertEquals(ErrorCode.NOT_FOUND, exception.getErrorCode());
+        assertEquals("Requested bug was not found for project id [1] bug id [1]", exception.getAdditionalInfo());
     }
 }
