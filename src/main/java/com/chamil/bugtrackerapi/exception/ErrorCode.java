@@ -1,19 +1,21 @@
 package com.chamil.bugtrackerapi.exception;
 
-public enum ErrorCode {
-    NOT_FOUND("404", "Requested resource not found"),
-    UNKNOWN_EXCEPTION("500", "An unknown error occurred");
+import org.springframework.http.HttpStatus;
 
-    private final String code;
+public enum ErrorCode {
+    NOT_FOUND(HttpStatus.BAD_REQUEST, "Requested resource not found"),
+    UNKNOWN_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "An unknown error occurred");
+
+    private final HttpStatus status;
     private final String message;
 
-    ErrorCode(String code, String message) {
-        this.code = code;
+    ErrorCode(HttpStatus status, String message) {
+        this.status = status;
         this.message = message;
     }
 
-    public String getCode() {
-        return code;
+    public HttpStatus getStatus() {
+        return status;
     }
 
     public String getMessage() {
