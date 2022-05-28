@@ -1,6 +1,6 @@
 package com.chamil.bugtrackerapi.exception;
 
-public class APIException extends RuntimeException {
+public class APIException extends Exception {
     private final ErrorCode errorCode;
     private String additionalInfo;
 

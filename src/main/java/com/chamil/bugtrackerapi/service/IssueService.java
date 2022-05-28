@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface IssueService<T extends Issue> {
     T get(Long projectId, Long issueId) throws APIException;
-    List<T> get(Long projectId);
-    T create(Long projectId, T issue);
-    T update(Long projectId, T issue);
-    T delete(Long projectId, T issue);
+    List<T> get(Long projectId) throws APIException;
+    T create(Long projectId, T issue) throws APIException;
+    T update(Long projectId, T issue) throws APIException;
+    T delete(Long projectId, Long issueId) throws APIException;
 }

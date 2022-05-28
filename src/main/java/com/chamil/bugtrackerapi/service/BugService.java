@@ -35,7 +35,7 @@ public class BugService implements IssueService<Bug> {
     }
 
     @Override
-    public List<Bug> get(Long projectId) {
+    public List<Bug> get(Long projectId) throws APIException {
         try {
             return bugRepository.findAllByProjectId(projectId);
         } catch (Exception e) {
@@ -45,17 +45,17 @@ public class BugService implements IssueService<Bug> {
     }
 
     @Override
-    public Bug create(Long projectId, Bug issue) {
+    public Bug create(Long projectId, Bug bug) {
         return null;
     }
 
     @Override
-    public Bug update(Long projectId, Bug issue) {
+    public Bug update(Long projectId, Bug bug) {
         return null;
     }
 
     @Override
-    public Bug delete(Long projectId, Bug issue) {
+    public Bug delete(Long projectId, Long bugId) {
         return null;
     }
 }
