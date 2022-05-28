@@ -44,7 +44,9 @@ public class BugController {
     }
 
     @PutMapping("/bugs/{bugId}")
-    public void updateBug(@PathVariable Long projectId, @PathVariable Long bugId) {
-
+    public ResponseEntity<BugTrackerResponse<Bug>> updateBug(@PathVariable Long projectId, @PathVariable Long bugId, @RequestBody BugDTO bugDTO) throws APIException {
+        Bug bug = bugService.update(projectId, bugId, bugDTO.merge(new Bug()));
+        BugTrackerResponse<Bug> apiResponse = new BugTrackerResponse<>(true, bug);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 }
