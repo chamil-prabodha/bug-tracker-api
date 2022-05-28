@@ -18,7 +18,7 @@ public abstract class Issue extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
-    @OneToMany(mappedBy = "issueId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "issueId", fetch = FetchType.EAGER)
     private List<Comment> comments;
     @Enumerated(EnumType.STRING)
     private Status status;

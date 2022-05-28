@@ -49,4 +49,11 @@ public class BugController {
         BugTrackerResponse<Bug> apiResponse = new BugTrackerResponse<>(true, bug);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
+
+    @DeleteMapping("/bugs/{bugId}")
+    public ResponseEntity<BugTrackerResponse<Bug>> deleteBug(@PathVariable Long projectId, @PathVariable Long bugId) throws APIException {
+        Bug bug = bugService.delete(projectId, bugId);
+        BugTrackerResponse<Bug> apiResponse = new BugTrackerResponse<>(true, bug);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
 }
