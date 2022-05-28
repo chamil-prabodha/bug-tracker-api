@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/projects/{projectId}")
 public class BugController {
@@ -22,13 +24,15 @@ public class BugController {
     @GetMapping("/bugs/{bugId}")
     public ResponseEntity<BugTrackerResponse<Bug>> getBug(@PathVariable Long projectId, @PathVariable Long bugId) throws APIException {
         Bug bug = bugService.get(projectId, bugId);
-        BugTrackerResponse<Bug> apiResponse = new com.chamil.bugtrackerapi.model.dto.BugTrackerResponse<>(true, bug);
+        BugTrackerResponse<Bug> apiResponse = new BugTrackerResponse<>(true, bug);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @GetMapping("/bugs")
-    public void getBugs(@PathVariable Long projectId) {
-
+    public ResponseEntity<BugTrackerResponse<List<Bug>>> getBugs(@PathVariable Long projectId) throws APIException {
+        List<Bug> bugs = bugService.get(projectId);
+        BugTrackerResponse<List<Bug>> apiResponse = new BugTrackerResponse<>(true, bugs);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @PostMapping("/bugs")
