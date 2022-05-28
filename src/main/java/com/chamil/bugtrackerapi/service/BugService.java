@@ -30,7 +30,7 @@ public class BugService implements IssueService<Bug> {
             throw new APIException(ErrorCode.NOT_FOUND, String.format("Requested bug not found for project id [%s] bug id [%s]", projectId, bugId));
         } catch (Exception e) {
             log.error("An unknown exception occurred while retrieving the bug for project [{}] bug id [{}]", projectId, bugId, e);
-            throw new APIException(ErrorCode.NOT_FOUND, e.getMessage());
+            throw new APIException(ErrorCode.UNKNOWN_EXCEPTION, e.getMessage());
         }
     }
 
