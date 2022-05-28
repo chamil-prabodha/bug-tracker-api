@@ -13,6 +13,7 @@ import javax.persistence.*;
 @MappedSuperclass
 public abstract class Issue extends BaseEntity {
     private String name;
+    private String description;
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;

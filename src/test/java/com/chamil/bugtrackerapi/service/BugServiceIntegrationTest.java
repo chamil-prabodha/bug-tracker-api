@@ -51,7 +51,7 @@ class BugServiceIntegrationTest {
     @Sql("sql/bug-service-test.sql")
     @Transactional
     @Test
-    void getBugNotFoundTest() throws APIException {
+    void getBugNotFoundTest() {
         APIException exception = assertThrows(APIException.class, () -> bugService.get(2L, 1L));
         assertEquals("Requested resource not found", exception.getMessage());
         assertEquals(ErrorCode.NOT_FOUND, exception.getErrorCode());
@@ -61,19 +61,19 @@ class BugServiceIntegrationTest {
     @Sql("sql/bug-service-test.sql")
     @Transactional
     @Test
-    void getAllBugsSuccessTest() throws JsonProcessingException, JSONException {
+    void getAllBugsSuccessTest() throws JsonProcessingException, JSONException, APIException {
         String expected = TestUtil.loadResourceAsString("json/bug-service-test.json", getClass());
 
         List<Bug> actual = bugService.get(1L);
         String actualJson = objectMapper.writeValueAsString(actual);
-
+        System.out.println(actualJson);
         JSONAssert.assertEquals(expected, actualJson, JSONCompareMode.STRICT);
     }
 
     @Sql("sql/bug-service-test.sql")
     @Transactional
     @Test
-    void getAllBugsEmptyTest() {
+    void getAllBugsEmptyTest() throws APIException {
         List<Bug> actual = bugService.get(2L);
         assertTrue(actual.isEmpty());
     }
