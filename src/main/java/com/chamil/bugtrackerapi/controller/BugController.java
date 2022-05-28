@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Digits;
 import java.util.List;
 
 @RestController
@@ -23,35 +25,50 @@ public class BugController {
     }
 
     @GetMapping("/bugs/{bugId}")
-    public ResponseEntity<BugTrackerResponse<Bug>> getBug(@PathVariable Long projectId, @PathVariable Long bugId) throws APIException {
+    public ResponseEntity<BugTrackerResponse<Bug>> getBug(
+            @PathVariable @Digits(integer = Integer.MAX_VALUE, fraction = 0) Long projectId,
+            @PathVariable @Digits(integer = Integer.MAX_VALUE, fraction = 0) Long bugId
+    ) throws APIException {
         Bug bug = bugService.get(projectId, bugId);
         BugTrackerResponse<Bug> apiResponse = new BugTrackerResponse<>(true, bug);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @GetMapping("/bugs")
-    public ResponseEntity<BugTrackerResponse<List<Bug>>> getBugs(@PathVariable Long projectId) throws APIException {
+    public ResponseEntity<BugTrackerResponse<List<Bug>>> getBugs(
+            @PathVariable @Digits(integer = Integer.MAX_VALUE, fraction = 0) Long projectId
+    ) throws APIException {
         List<Bug> bugs = bugService.get(projectId);
         BugTrackerResponse<List<Bug>> apiResponse = new BugTrackerResponse<>(true, bugs);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @PostMapping("/bugs")
-    public ResponseEntity<BugTrackerResponse<Bug>> createBug(@PathVariable Long projectId, @RequestBody BugDTO bugDTO) throws APIException {
+    public ResponseEntity<BugTrackerResponse<Bug>> createBug(
+            @PathVariable @Digits(integer = Integer.MAX_VALUE, fraction = 0) Long projectId,
+            @RequestBody @Valid BugDTO bugDTO
+    ) throws APIException {
         Bug bug = bugService.create(projectId, bugDTO.merge(new Bug()));
         BugTrackerResponse<Bug> apiResponse = new BugTrackerResponse<>(true, bug);
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
     @PutMapping("/bugs/{bugId}")
-    public ResponseEntity<BugTrackerResponse<Bug>> updateBug(@PathVariable Long projectId, @PathVariable Long bugId, @RequestBody BugDTO bugDTO) throws APIException {
+    public ResponseEntity<BugTrackerResponse<Bug>> updateBug(
+            @PathVariable @Digits(integer = Integer.MAX_VALUE, fraction = 0) Long projectId,
+            @PathVariable @Digits(integer = Integer.MAX_VALUE, fraction = 0) Long bugId,
+            @RequestBody @Valid BugDTO bugDTO
+    ) throws APIException {
         Bug bug = bugService.update(projectId, bugId, bugDTO.merge(new Bug()));
         BugTrackerResponse<Bug> apiResponse = new BugTrackerResponse<>(true, bug);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/bugs/{bugId}")
-    public ResponseEntity<BugTrackerResponse<Bug>> deleteBug(@PathVariable Long projectId, @PathVariable Long bugId) throws APIException {
+    public ResponseEntity<BugTrackerResponse<Bug>> deleteBug(
+            @PathVariable @Digits(integer = Integer.MAX_VALUE, fraction = 0) Long projectId,
+            @PathVariable @Digits(integer = Integer.MAX_VALUE, fraction = 0) Long bugId
+    ) throws APIException {
         Bug bug = bugService.delete(projectId, bugId);
         BugTrackerResponse<Bug> apiResponse = new BugTrackerResponse<>(true, bug);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
