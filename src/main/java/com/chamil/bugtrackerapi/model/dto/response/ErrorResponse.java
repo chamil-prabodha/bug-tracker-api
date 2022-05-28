@@ -1,4 +1,4 @@
-package com.chamil.bugtrackerapi.model.dto;
+package com.chamil.bugtrackerapi.model.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;

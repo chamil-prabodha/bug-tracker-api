@@ -1,7 +1,8 @@
 package com.chamil.bugtrackerapi.controller;
 
 import com.chamil.bugtrackerapi.exception.APIException;
-import com.chamil.bugtrackerapi.model.dto.BugTrackerResponse;
+import com.chamil.bugtrackerapi.model.dto.request.BugDTO;
+import com.chamil.bugtrackerapi.model.dto.response.BugTrackerResponse;
 import com.chamil.bugtrackerapi.model.entity.Bug;
 import com.chamil.bugtrackerapi.service.IssueService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,10 @@ public class BugController {
     }
 
     @PostMapping("/bugs")
-    public void createBug(@PathVariable Long projectId) {
-
+    public ResponseEntity<BugTrackerResponse<Bug>> createBug(@PathVariable Long projectId, @RequestBody BugDTO bugDTO) throws APIException {
+        Bug bug = bugService.create(projectId, bugDTO.merge(new Bug()));
+        BugTrackerResponse<Bug> apiResponse = new BugTrackerResponse<>(true, bug);
+        return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
     @PutMapping("/bugs/{bugId}")
