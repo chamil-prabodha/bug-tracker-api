@@ -74,7 +74,7 @@ The API runs on port 8080 by default and requires Java 17 or above
 ```
 
 #### Postman Collection
-* [Full API Spec](Bug Tracker.postman_collection.json)
+* [Full API Spec](./Bug-Tracker.postman_collection.json)
 
 
 ## Test
